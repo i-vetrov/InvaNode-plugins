@@ -1,0 +1,111 @@
+<style>
+  .contacts {
+    width: 100%;
+    height: auto;
+    font-size: 14px;
+  }
+  textarea {
+    height: 200px;
+  }
+  .contacts .left {
+    font-weight: bold;
+  }
+  .send-button {
+    float:right;
+    margin-right: 20px;
+  }
+  .contacts .result {
+    float: left;
+  }
+</style>
+<div class="contacts">
+  <div id="name-group" class="control-group">
+    <div class="left span1">
+      Name: 
+    </div>
+    <div class="right">
+      <input class="span4" type="text" id="form_name" />
+      <div id="name-error-mess" class="help-inline" style="display:none;">Please, enter your name</div>
+    </div>
+  </div>
+  <div id="email-group" class="control-group">
+    <div class="left  span1">
+      Email: 
+    </div>
+    <div class="right">
+      <input class="span4" type="text" id="form_email" />
+      <div id="email-error-mess" class="help-inline" style="display:none;">Please, enter valid email</div>
+    </div>
+  </div>
+  <div id="message-group" class="control-group">
+    <div class="left  span1">
+      Text: 
+    </div>
+    <div class="right">
+      <textarea class="span4" id="form_message" ></textarea>
+      <div id="message-error-mess" class="help-inline" style="display:none;">Please, enter your message</div>
+    </div>
+  </div>
+  <div class="span5 ">
+    <div class="result"></div>
+    <button class="btn btn-primary send-button" id="form_button">Send</button>
+  </div>
+</div>
+<script>
+(function() {
+  $ = jQuery;
+  $("#form_button").click(function() {
+    var name = $("#form_name").val();
+    var email = $("#form_email").val();
+    var text = $("#form_message").val();
+    if(name !== '') {
+      hideError('name')
+      if(text !== '') {
+        hideError('message');
+        if (validateEmail(email)) {
+          hideError('email');
+          sendingMail(name ,email, text);
+        } else {
+          showError('email');
+        }
+      } else {
+        showError('message');
+      }
+    } else {
+      showError('name');
+    }
+  });
+  
+function showError(place) {
+  $("#" + place + "-group").addClass("error");
+  $("#" + place + "-error-mess").css("display","block");
+}
+
+function hideError(place) {
+  $("#" + place + "-group").removeClass("error");
+  $("#" + place + "-error-mess").css("display","none");
+}
+})(jQuery)  
+
+function validateEmail(email) { 
+    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+}
+
+function sendingMail(name ,email, text)
+{
+    _in.api('plugin',{alias:'send_mail', name:name, email:email, text:text}, function(data){
+        if(data=="error"){
+          $(".contacts").find(".result").html('<span style="color:red">Error. Check your Internet connection.</span>');
+          return;
+        }
+        data = JSON.parse(data);
+        if(data.message=="error"){
+          $(".contacts").find(".result").html('<span style="color:red">Server error. Try again later.</span>');
+        }
+        else {
+          $(".contacts").find(".result").html('<span style="color:green">Success! We\'ll contact you soon.</span>');
+        }
+    });
+}
+</script>

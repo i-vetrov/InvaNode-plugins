@@ -1,0 +1,15 @@
+{   
+  "name": "Contact form plugin",
+  "description": "Contact form plugin for IvaNode CMS",
+  "author": "Ivan Vetrov <i.vetrov@gmail.com>, Invatechs <info@invatechs.com>",
+  "repository": {
+    "type" :  "git",
+    "url": "http://github.com/i-vetrov/InvaNode-plugins.git"
+  },
+  "dependencies": {
+    "nodemailer": "0.4.1"
+  },
+  "engines": {
+    "node": ">=0.8"
+  }
+}

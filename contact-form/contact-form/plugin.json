@@ -1,0 +1,14 @@
+{
+    "name": "Contact form",
+    "author": "InvaNode",
+    "description": "Sending e-mails",
+    "content": {
+        "replace": "{{PLUGIN:SEND_MAIL}}",
+        "source": "send_mail.html",
+        "replaceWith": ""
+    },
+    "applyTo": [
+        "posts",
+        "pages"
+    ]
+}
